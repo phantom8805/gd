@@ -1,10 +1,11 @@
 package org.happysanta.gd;
 
+import static org.happysanta.gd.Helpers.getGDActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Environment;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -36,7 +37,7 @@ public class FileDialog {
 	public FileDialog(Activity activity, File path, String fileEndsWith) {
 		this.activity = activity;
 		this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
-		if (!path.exists()) path = Environment.getExternalStorageDirectory();
+		if (!path.exists()) path = getGDActivity().getFilesDir();
 		// logDebug("FileDialog contrustor, path = " + path);
 		loadFileList(path);
 	}

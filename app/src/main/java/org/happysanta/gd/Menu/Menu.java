@@ -1513,7 +1513,7 @@ public class Menu
 		}
 
 		final GDActivity gd = getGDActivity();
-		FileDialog fileDialog = new FileDialog(gd, Environment.getExternalStorageDirectory(), ".mrg");
+		FileDialog fileDialog = new FileDialog(gd, getGDActivity().getFilesDir(), ".mrg");
 		fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
 			public void fileSelected(final File file) {
 				final EditText input = new EditText(gd);

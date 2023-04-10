@@ -434,8 +434,8 @@ public class LevelsManager {
 	}
 
 	public static File getLevelsDirectory() {
-		File file = new File(Environment.getExternalStorageDirectory(), "GDLevels");
-		if (!file.mkdirs()) {
+		File file = new File(getGDActivity().getFilesDir(), "GDLevels");
+		if (!file.exists()) {
 			logDebug("LevelsManager.getLevelsDirectory: directory not created");
 		}
 		return file;
