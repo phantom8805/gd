@@ -113,6 +113,7 @@ public class KeyboardController implements View.OnTouchListener {
 					btn = pointer.getButton();
 
 					btn.setPressed(true);
+
 					gameView.keyPressed(gameKeyCode(btnIndex));
 					break;
 

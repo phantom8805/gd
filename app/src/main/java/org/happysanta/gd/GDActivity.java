@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
+import android.view.InputDevice;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,6 +108,54 @@ public class GDActivity extends Activity implements Runnable {
 	private MenuTextView portedTextView;
 	private int buttonHeight = 60;
 	public LevelsManager levelsManager;
+
+	@Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) != InputDevice.SOURCE_JOYSTICK &&
+                (event.getSource() & InputDevice.SOURCE_GAMEPAD) != InputDevice.SOURCE_GAMEPAD
+        ) {
+            return super.dispatchKeyEvent(event);
+        }
+
+        if (event.getRepeatCount() != 0 || this.gameView == null) {
+            return true;
+        }
+
+        int keyCode = event.getKeyCode();
+
+//		Helpers.logDebug(keyCode);
+
+		int gameViewKeyOffset = 48;
+
+		int gameViewKey;
+
+		if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_BUTTON_B) {
+			gameViewKey = gameViewKeyOffset + 8;
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_BUTTON_X) {
+			gameViewKey = gameViewKeyOffset + 2;
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_BUTTON_A) {
+			gameViewKey = gameViewKeyOffset + 4;
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_BUTTON_C) {
+			gameViewKey = gameViewKeyOffset + 6;
+		} else if (keyCode == KeyEvent.KEYCODE_BUTTON_Y || keyCode == KeyEvent.KEYCODE_BUTTON_Z) {
+			gameViewKey = gameViewKeyOffset + 5;
+		} else {
+			return true;
+		}
+
+
+        if (KeyEvent.ACTION_DOWN == event.getAction()) {
+            this.gameView.keyPressed(gameViewKey);
+//            Helpers.logDebug("pressed");
+        }
+
+        if (KeyEvent.ACTION_UP == event.getAction()) {
+            this.gameView.keyReleased(gameViewKey);
+//            Helpers.logDebug("released");
+        }
+
+        return true;
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -1099,73 +1149,6 @@ public class GDActivity extends Activity implements Runnable {
 		PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-	}
-
-	private void sendStats() {
-		long lastTs = Settings.getLastSendStats();
-		Helpers.logDebug("sendStats: lastTs = " + lastTs);
-		if (lastTs == 0) {
-			Helpers.logDebug("sendStats: set it to current ts and return");
-			Settings.setLastSendStats(Helpers.getTimestamp());
-			return;
-		}
-
-		// if (Helpers.getTimestamp() < lastTs + 3600 * 8) {
-		if (Helpers.getTimestamp() < lastTs + 10) {
-			Helpers.logDebug("sendStats: just return");
-			return;
-		}
-
-		final GDActivity self = this;
-		Thread statsThread = new Thread() {
-			@Override
-			public void run() {
-				try {
-					HashMap<String, Double> stats = levelsManager.getLevelsStat();
-
-					JSONObject statsJSON = new JSONObject(stats);
-					String id = Installation.id(self);
-					int useCheats = org.happysanta.gd.Menu.Menu.isNameCheat(Settings.getName()) ? 1 : 0;
-
-					API.sendStats(statsJSON.toString(), id, useCheats, new ResponseHandler() {
-						@Override
-						public void onResponse(Response response) {
-							Helpers.logDebug("send stats OK");
-							Settings.setLastSendStats(Helpers.getTimestamp());
-						}
-
-						@Override
-						public void onError(APIException error) {
-							Helpers.logDebug("send stats error: " + error.getMessage());
-							// logDebug(error);
-							// error.printStackTrace();
-						}
-					});
-				} catch (Exception e) {
-					Helpers.logDebug("send stats exception: " + e.getMessage());
-					// e.printStackTrace();
-				}
-			}
-		};
-		statsThread.start();
-	}
-
-	public void sendKeyboardLogs() {
-		final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.please_wait), getString(R.string.please_wait), true);
-		API.sendKeyboardLogs(keyboardController.getLog(), new ResponseHandler() {
-			@Override
-			public void onResponse(Response response) {
-				progressDialog.dismiss();
-				keyboardController.clearLogBuffer();
-				Helpers.showAlert(getString(R.string.ok), "Done", null);
-			}
-
-			@Override
-			public void onError(APIException error) {
-				progressDialog.dismiss();
-				Helpers.showAlert(getString(R.string.error), "Unable to send logs. Maybe log is empty?", null);
-			}
-		});
 	}
 
 	private class ButtonCoords {

@@ -32,21 +32,6 @@ public class API {
 		return new Request("getNotifications", params, handler);
 	}
 
-	public static Request sendStats(String statsJSON, String installationID, int useCheats, ResponseHandler handler) {
-		List<NameValuePair> params = new LinkedList<NameValuePair>();
-		params.add(new BasicNameValuePair("stats", statsJSON));
-		params.add(new BasicNameValuePair("id", installationID));
-		params.add(new BasicNameValuePair("use_cheats", String.valueOf(useCheats)));
-		return new Request("sendStats", params, handler);
-	}
-
-	public static Request sendKeyboardLogs(String log, ResponseHandler handler) {
-		List<NameValuePair> params = new LinkedList<NameValuePair>();
-		params.add(new BasicNameValuePair("log", log));
-		params.add(new BasicNameValuePair("device", getDeviceName()));
-		return new Request("sendKeyboardLogs", params, handler, true);
-	}
-
 	public static DownloadFile downloadMrg(long id, FileOutputStream output, DownloadHandler handler) {
 		return new DownloadFile(String.format(MRG_URL, id), output, handler);
 	}
