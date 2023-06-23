@@ -1039,7 +1039,10 @@ public class GDActivity extends Activity implements Runnable {
 		// menu.helmetRotationStop();
 		// Menu.HelmetRotation.stop();
 		if (gameView != null) gameView.addMenuCommand();
-		showKeyboardLayout();
+
+		if (Settings.isKeyboardInMenuEnabled())
+			showKeyboardLayout();
+
 		// menu.showKeyboard();
 
 		menuToGameUpdateUi();
