@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -266,7 +267,7 @@ public class GDActivity extends Activity implements Runnable {
 			scrollView.setVisibility(View.GONE);
 
 			frame = new FrameLayout(this);
-			frame.setBackgroundColor(0xffffffff);
+			frame.setBackgroundColor(Color.BLACK);
 
 			titleLayout = new MenuTitleLinearLayout(this);
 			titleLayout.setBackgroundColor(0x00ffffff);

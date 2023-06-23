@@ -5,6 +5,7 @@ import static org.happysanta.gd.Helpers.isSDK11OrHigher;
 import static org.happysanta.gd.Helpers.loadBitmapFromAsset;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -421,7 +422,7 @@ public class GameView extends View {
 	}
 
 	public void _newvV() {
-		paint.setColor(0xFFFFFFFF);
+		paint.setColor(Color.BLACK);
 		paint.setStyle(Paint.Style.FILL);
 		canvas.drawRect(0, m_dI, m_abI, 80, paint);
 		byte byte0 = 35;
@@ -635,7 +636,7 @@ public class GameView extends View {
 	}
 
 	public void _tryvV() {
-		paint.setColor(0xFFFFFFFF);
+		paint.setColor(Color.BLACK);
 		canvas.drawRect(0, 0, m_abI, m_dI, paint);
 	}
 
@@ -675,8 +676,9 @@ public class GameView extends View {
 			canvas = g;
 		if (m_oI != 0) {
 			if (m_oI == 1) {
+
 				// Draw codebrew
-				paint.setColor(0xFFFFFFFF);
+				paint.setColor(Color.BLACK);
 				canvas.drawRect(0, 0, getScaledWidth(), getScaledHeight(), paint);
 				if (Bitmap.get(Bitmap.CODEBREW_LOGO) != null) {
 					drawBitmap(Bitmap.get(Bitmap.CODEBREW_LOGO),
@@ -685,7 +687,7 @@ public class GameView extends View {
 				}
 			} else {
 				// Draw gd
-				paint.setColor(0xFFFFFFFF);
+				paint.setColor(Color.BLACK);
 				canvas.drawRect(0, 0, getScaledWidth(), getScaledHeight(), paint);
 				if (Bitmap.get(Bitmap.GD_LOGO) != null) {
 					drawBitmap(Bitmap.get(Bitmap.GD_LOGO),
